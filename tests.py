@@ -1,7 +1,8 @@
 import main
 
 # Use the cursor from main
-cur = main.cur
+conn = main.get_db_connection()
+cur = conn.cursor()
 
 print("=== Testing Users ===\n")
 u = main.Users(None, "Alice", "Alice@example.com", "976694211", "Player")
@@ -15,7 +16,7 @@ u.delete_user()
 print("Users after delete:", u.list_users())
 
 print("\n=== Testing Teams ===\n")
-t = main.Teams(None, "Warriors", 5, "Chess", "Alice")
+t = main.Teams(None, "Warriors", "Chess", 1)
 t.create_team()
 print("Teams after insert:", t.list_teams())
 t.team_id = "1"

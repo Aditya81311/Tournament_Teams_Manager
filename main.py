@@ -64,20 +64,19 @@ class Users():
         conn.close()
 
 class Teams():
-    def __init__(self, team_id, team_name, number_members, game, team_captain):
+    def __init__(self, team_id, team_name, game_id, team_captain_id):
                self.team_id = team_id
                self.team_name = team_name
-               self.number_members = number_members
-               self.game = game
-               self.team_captain = team_captain
+               self.game_id = game_id
+               self.team_captain_id = team_captain_id
                
     def create_team(self):
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute('''
-            INSERT INTO teams(team_name, number_members, game, team_captain) 
-            VALUES(?,?,?,?)
-        ''', (self.team_name, self.number_members, self.game, self.team_captain))
+            INSERT INTO teams(team_name, game_id, team_captain_id) 
+            VALUES(?,?,?)
+        ''', (self.team_name, self.game_id, self.team_captain_id))
         conn.commit()
         conn.close()
     
@@ -89,11 +88,8 @@ class Teams():
             SELECT 
                 team_id,
                 team_name,
-                number_members,
-                game,
-                team_captain,
-                game,
-                team_captain
+                game_id,
+                team_captain_id
             FROM teams
             ORDER BY team_id DESC
         ''')
@@ -106,9 +102,9 @@ class Teams():
         cur = conn.cursor()
         cur.execute('''
             UPDATE teams 
-            SET team_name = ?, number_members = ?, game = ?, team_captain = ? 
+            SET team_name = ?, game_id = ?, team_captain_id = ? 
             WHERE team_id = ?
-        ''', (self.team_name, self.number_members, self.game, self.team_captain, self.team_id))
+        ''', (self.team_name, self.game_id, self.team_captain_id, self.team_id))
         conn.commit()
         conn.close()
 
@@ -122,18 +118,18 @@ class Teams():
         conn.close()
   
 class Games():
-    def __init__(self,game_id,game_name,game_gener):
+    def __init__(self,game_id,game_name,game_genre):
         self.game_id = game_id
         self.game_name = game_name
-        self.game_gener = game_gener
+        self.game_genre = game_genre
     
     def add_game(self):
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute('''
-        INSERT INTO games(game_name,game_gener)
+        INSERT INTO games(game_name,game_genre)
         VALUES(?,?)
-        ''',(self.game_name,self.game_gener))
+        ''',(self.game_name,self.game_genre))
         conn.commit()
         conn.close()
     
@@ -151,9 +147,9 @@ class Games():
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute('''
-        UPDATE games SET game_name = ?,game_gener = ? 
+        UPDATE games SET game_name = ?,game_genre = ? 
          WHERE game_id = ?
-        ''',(self.game_name,self.game_gener,self.game_id))
+        ''',(self.game_name,self.game_genre,self.game_id))
         conn.commit()
         conn.close()
 
@@ -280,3 +276,63 @@ class Matches():
         ''', (self.match_id,))
         conn.commit()
         conn.close()
+    
+class Fetch_data():
+    def __init__(self,user_id):
+        self.user_id = user_id
+
+    def fetch_users(self):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        user = cur.execute('''
+        SELECT * FROM users
+        ''').fetchall()
+        conn.close()
+        return [dict(row) for row in user]
+
+    def fetch_user_info(self):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        user_info = cur.execute('''
+        SELECT * FROM users WHERE user_id = ?
+        ''',(self.user_id,)).fetchall()
+        conn.close()
+        return [dict(row) for row in user_info]
+
+    def fetch_captain(self):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        captains = cur.execute('''
+        SELECT u.user_name FROM team_members tm JOIN users u ON tm.user_id = u.user_id WHERE tm.is_captain = TRUE
+        ''').fetchall()
+        conn.close()
+        return [dict(row) for row in captains]
+
+    def fetch__leader_board(self):
+        pass
+
+    def fetch_games(self):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        game = cur.execute('''
+        SELECT * FROM games 
+        ''').fetchall()
+        conn.close()
+        return [dict(row) for row in game]
+
+    def fetch_teams(self):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        teams = cur.execute('''
+        SELECT * FROM teams 
+        ''').fetchall()
+        conn.close()
+        return [dict(row) for row in teams]
+
+if __name__=="__main__":
+    data = Fetch_data(1)
+    print(data.fetch_users())
+    print(data.fetch_user_info())
+    print(data.fetch_captain())
+    print(data.fetch_games())
+    print(data.fetch_teams())
