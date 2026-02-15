@@ -15,7 +15,7 @@ class Data_base():
               user_role VARCHAR NOT NULL
               )
         ''')
-        print("Table Crated ")
+        print("User Table Crated ")
     def team_table(self):
         cur.execute(''' 
           CREATE TABLE IF NOT EXISTS  teams(
@@ -26,7 +26,7 @@ class Data_base():
                team_captain VARCHAR NOT NULL
            ) 
             ''')
-        print("Table Crated ")
+        print("Team Table Crated ")
     def team_member(sef):
         cur.execute('''
         CREATE TABLE IF NOT EXISTS team_members(
@@ -38,8 +38,7 @@ class Data_base():
         FOREIGN KEY (user_id) REFERENCES users(user_id)
         )
         ''')
-
-
+        print("Team Members Table Created")
     def games_table(self):
         cur.execute('''
         CREATE TABLE IF NOT EXISTS  games(
@@ -48,7 +47,7 @@ class Data_base():
                game_gener VARCHAR NOT NULL
         )
         ''')
-        print("Table Crated ")
+        print("Games Table Crated ")
     def tournament_table(self):
         cur.execute('''
         CREATE TABLE IF NOT EXISTS tournaments (
@@ -58,6 +57,7 @@ class Data_base():
             FOREIGN KEY (game_id) REFERENCES games(game_id)
         )
         ''')
+        print("Taurnament Table Created")
     def matches_table(self):
         cur.execute('''
         CREATE TABLE IF NOT EXISTS matches (
@@ -70,7 +70,7 @@ class Data_base():
             FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id)
         )
         ''')
-        print("Table Crated ")
+        print("Matches Table Crated ")
 
     def leader_board_table(self):
         cur.execute('''
@@ -89,6 +89,7 @@ class Data_base():
         FOREIGN KEY (match_id) REFERENCES matches(match_id)
         )
         ''')
+        print("Leader Board Table Created")
 if __name__ == "__main__":
     create_tables = Data_base()
     create_tables.user_table()
