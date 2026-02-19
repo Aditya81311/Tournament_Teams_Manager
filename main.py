@@ -313,13 +313,18 @@ class Fetch_data():
         pass
 
     def fetch_games(self):
-        conn = get_db_connection()
-        cur = conn.cursor()
-        game = cur.execute('''
-        SELECT * FROM games 
-        ''').fetchall()
-        conn.close()
-        return [dict(row) for row in game]
+        games = Games(None,None,None)
+        listgames = games.list_games()
+        return listgames
+    
+    def fetch_tournaments(self):
+        lists = Tournaments(None,None, None,None,None,None)
+        tournaments = lists.list_tournaments()
+        return tournaments
+    
+    def fetch_matches(self):
+        matches = Matches.list_matches(None)
+        return matches
 
     def fetch_teams(self):
         conn = get_db_connection()
@@ -330,6 +335,7 @@ class Fetch_data():
         ''').fetchall()
         conn.close()
         return [dict(row) for row in teams]
+
 
 if __name__=="__main__":
     data = Fetch_data(1)

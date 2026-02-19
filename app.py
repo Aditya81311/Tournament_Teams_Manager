@@ -1,5 +1,5 @@
 from flask import Flask, render_template , request 
-from main import Users, Teams,Games,Tournaments
+from main import Users, Teams,Games,Tournaments,Matches,Fetch_data
 
 app = Flask(__name__)
 
@@ -10,9 +10,8 @@ def index():
 @app.route("/list_games",methods = ["GET","POST"])
 def list_games():
     if request.method == "GET":
-        games = Games(None,None,None)
-        listgames = games.list_games()
-    return render_template("games.html",games = listgames)
+        games = Fetch_data.fetch_games(None)
+    return render_template("games.html",games = games)
 
 @app.route("/add_games",methods = ["GET","POST"])
 def add_games():
@@ -36,9 +35,8 @@ def update_games():
 @app.route("/delete_games",methods = ["GET"])
 def show_delete_games():
     if request.method == "GET":
-        games = Games(None,None,None)
-        listgames = games.list_games()
-    return render_template("delete_games.html",games = listgames)
+        games = Fetch_data.fetch_games(None)
+    return render_template("delete_games.html",games = games)
 
 @app.route("/delete_games",methods = ["POST"])
 def delete_games():
@@ -47,13 +45,13 @@ def delete_games():
         delete = Games(game_id,None,None)
         delete.delete_game()
     return "Success"
-@app.route('/create_tournament', methods=['GET'])
+
+@app.route('/create_tournaments', methods=['GET'])
 def list_games_to_tournament():
     if request.method == "GET":
-        games = Games(None,None,None)
-        listgames = games.list_games()
-    return render_template('create_tournaments.html',games = listgames)
-@app.route('/create_tournament', methods=['POST'])
+        games = Fetch_data.fetch_games(None)
+    return render_template('create_tournaments.html',games = games)
+@app.route('/create_tournaments', methods=['POST'])
 def create_tournament():
     if request.method == "POST":
         # tournament_id = request.form["tournament_id"]
@@ -71,18 +69,15 @@ def create_tournament():
 def list_tournaments():
     if request.method == "GET":
         # tournament_id = request.form["tournament_id"]
-        lists = Tournaments(None,None, None,None,None,None)
-        tournaments = lists.list_tournaments()
+        tournaments = Fetch_data.fetch_tournaments(None)
     return render_template('list_tournaments.html',tournaments = tournaments)
 
 @app.route('/update_tournaments', methods=['GET'])
 def show_update_page():
     if request.method == "GET":
-        games = Games(None,None,None)
-        listgames = games.list_games()
-        lists = Tournaments(None,None, None,None,None,None)
-        tournaments = lists.list_tournaments()
-    return render_template('update_tournaments.html',games = listgames, tournaments = tournaments)
+        games = Fetch_data.fetch_games(None)
+        tournaments = Fetch_data.fetch_tournaments(None)
+    return render_template('update_tournaments.html',games = games, tournaments = tournaments)
 @app.route('/update_tournaments', methods=['POST'])
 def update_tournaments():
     if request.method == "POST":
@@ -96,10 +91,72 @@ def update_tournaments():
         update.update_tournament()
     return "success"
 
-
-@app.route('/delete_tournament', methods=['GET', 'POST'])
+@app.route('/delete_tournaments', methods=['GET'])
+def show_delete_tournaments():
+    if request.method == "GET":
+        # tournament_id = request.form["tournament_id"]
+        tournaments = Fetch_data.fetch_tournaments(None)
+    return render_template('delete_tournaments.html',tournaments = tournaments)
+@app.route('/delete_tournament', methods=['POST'])
 def delete_tournament():
-    return render_template('delete_tournament.html')
+    if request.method == "POST":
+        tournament_id = request.form["tournament_id"]
+        delete = Tournaments(tournament_id,None, None,None,None,None)
+        delete.delete_tournament()
+    return "success"
+
+@app.route('/create_match', methods=['GET', 'POST'])
+def create_match():
+    if request.method == "GET":
+        tournaments = Fetch_data.fetch_tournaments(None)
+        return render_template('create_match.html',tournaments = tournaments)
+    if request.method == "POST":
+        # match_id = request.form["match_id"]
+        tournament_id = request.form["tournament_id"]
+        match_no = request.form["match_no"]
+        round_no = request.form["round_no"]
+        scheduled_at = request.form["scheduled_at"]
+        status = request.form["status"]
+        create = Matches(None,tournament_id, match_no, round_no, scheduled_at, status)
+        create.add_match()
+        return "success"
+    
+@app.route('/list_matches', methods=['GET'])
+def list_matches():
+    if request.method == "GET":
+        matches = Fetch_data.fetch_matches(None)
+    return render_template('list_matches.html',matches = matches)
+
+
+@app.route('/update_matches', methods=['GET', 'POST'])
+def update_match():
+    if request.method == "GET":
+        tournaments = Fetch_data.fetch_tournaments(None)
+        matches = Fetch_data.fetch_matches(None)
+        return render_template('update_matches.html',tournaments = tournaments,matches = matches)
+    if request.method == "POST":
+        # match_id = request.form["match_id"]
+        tournament_id = request.form["tournament_id"]
+        # match_no = request.form["match_no"]
+        round_no = request.form["round_no"]
+        scheduled_at = request.form["scheduled_at"]
+        status = request.form["status"]
+        create = Matches(None,tournament_id,None, round_no, scheduled_at, status)
+        create.update_match()
+        return "success"
+    
+
+
+@app.route('/delete_matches', methods=['GET', 'POST'])
+def delete_match():
+    if request.method  == "GET":
+        matches = Fetch_data.fetch_matches(None)
+        return render_template('delete_matches.html',matches = matches)
+    if request.method == "POST":
+        match_id = request.form["match_id"]
+        delete = Matches(match_id,None,None,None,None,None)
+        delete.delete_match()
+        return "success"
 
 
 if __name__ == "__main__":
