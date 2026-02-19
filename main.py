@@ -132,6 +132,7 @@ class Games():
         ''',(self.game_name,self.game_genre))
         conn.commit()
         conn.close()
+        return "Game Added"
     
     def list_games(self):
         conn = get_db_connection()
@@ -332,8 +333,8 @@ class Fetch_data():
 
 if __name__=="__main__":
     data = Fetch_data(1)
-    print(data.fetch_users())
-    print(data.fetch_user_info())
-    print(data.fetch_captain())
+    # print(data.fetch_users())
+    # print(data.fetch_user_info())
+    # print(data.fetch_captain())
     print(data.fetch_games())
-    print(data.fetch_teams())
+    # print(data.fetch_teams())

@@ -98,12 +98,17 @@ class Data_base():
         ''')
         print("Leader Board Table Created")
 if __name__ == "__main__":
-    create_tables = Data_base()
-    create_tables.user_table()
-    create_tables.team_table()
-    create_tables.team_member()
-    create_tables.games_table()
-    create_tables.tournament_table()
-    create_tables.matches_table()
-    create_tables.leader_board_table()
+    # create_tables = Data_base()
+    # create_tables.user_table()
+    # create_tables.team_table()
+    # create_tables.team_member()
+    # create_tables.games_table()
+    # create_tables.tournament_table()
+    # create_tables.matches_table()
+    # create_tables.leader_board_table()
+    cur.execute('''
+    ALTER TABLE tournaments
+    ADD status VARCHAR (10);
+    ''')
+    print("added column successfully")
     
