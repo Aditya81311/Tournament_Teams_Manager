@@ -35,19 +35,17 @@ def update_games():
         update.update_game()
     return render_template("update_games.html")
 
-@app.route("/delete_games",methods = ["GET"])
-def show_delete_games():
-    if request.method == "GET":
-        games = Fetch_data.fetch_games(None)
-    return render_template("delete_games.html",games = games)
 
-@app.route("/delete_games",methods = ["POST"])
+@app.route("/delete_games",methods = ["GET","POST"])
 def delete_games():
+    games = Fetch_data.fetch_games(None)
+    if request.method == "GET":
+        return render_template("delete_games.html",games = games)
     if request.method == "POST":
         game_id = request.form["game_id"]
         delete = Games(game_id,None,None)
         delete.delete_game()
-    return render_template("delete_games.html")
+    return render_template("delete_games.html",games = games)
 
 @app.route('/create_tournaments', methods=['GET'])
 def list_games_to_tournament():
@@ -75,14 +73,12 @@ def list_tournaments():
         tournaments = Fetch_data.fetch_tournaments(None)
     return render_template('list_tournaments.html',tournaments = tournaments)
 
-@app.route('/update_tournaments', methods=['GET'])
-def show_update_page():
-    if request.method == "GET":
-        games = Fetch_data.fetch_games(None)
-        tournaments = Fetch_data.fetch_tournaments(None)
-    return render_template('update_tournaments.html',games = games, tournaments = tournaments)
-@app.route('/update_tournaments', methods=['POST'])
+@app.route('/update_tournaments', methods=['GET','POST'])
 def update_tournaments():
+    games = Fetch_data.fetch_games(None)
+    tournaments = Fetch_data.fetch_tournaments(None)
+    if request.method == "GET":
+        return render_template('update_tournaments.html',games = games, tournaments = tournaments)
     if request.method == "POST":
         tournament_id = request.form["tournament_id"]
         name = request.form["name"]
@@ -92,7 +88,7 @@ def update_tournaments():
         status  = request.form["status"]
         update = Tournaments(tournament_id,name, game_id, start_date, end_date, status)
         update.update_tournament()
-    return render_template('update_tournaments.html')
+    return render_template('update_tournaments.html',games = games, tournaments = tournaments)
 
 @app.route('/delete_tournaments', methods=['GET'])
 def show_delete_tournaments():
