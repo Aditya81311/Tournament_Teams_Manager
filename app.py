@@ -24,6 +24,9 @@ def add_games():
 
 @app.route("/update_games",methods = ["GET","POST"])
 def update_games():
+    if request.method == "GET":
+            games = Fetch_data.fetch_games(None)
+            return render_template("update_games.html",games = games)
     if request.method == "POST":
         game_id = request.form["game_id"]
         game_name = request.form["game_name"]
@@ -44,7 +47,7 @@ def delete_games():
         game_id = request.form["game_id"]
         delete = Games(game_id,None,None)
         delete.delete_game()
-    return "Success"
+    return render_template("delete_games.html")
 
 @app.route('/create_tournaments', methods=['GET'])
 def list_games_to_tournament():
@@ -62,7 +65,7 @@ def create_tournament():
         status  = request.form["status"]
         create = Tournaments(None,name, game_id, start_date, end_date, status)
         create.create_tournament()
-    return "success"
+    return render_template('create_tournaments.html')
     
 
 @app.route('/list_tournaments', methods=['GET'])
@@ -89,7 +92,7 @@ def update_tournaments():
         status  = request.form["status"]
         update = Tournaments(tournament_id,name, game_id, start_date, end_date, status)
         update.update_tournament()
-    return "success"
+    return render_template('update_tournaments.html')
 
 @app.route('/delete_tournaments', methods=['GET'])
 def show_delete_tournaments():
@@ -103,7 +106,7 @@ def delete_tournament():
         tournament_id = request.form["tournament_id"]
         delete = Tournaments(tournament_id,None, None,None,None,None)
         delete.delete_tournament()
-    return "success"
+    return render_template('delete_tournaments.html')
 
 @app.route('/create_matches', methods=['GET', 'POST'])
 def create_match():
@@ -119,7 +122,7 @@ def create_match():
         status = request.form["status"]
         create = Matches(None,tournament_id, match_no, round_no, scheduled_at, status)
         create.add_match()
-        return "success"
+    return render_template('create_matches.html')
     
 @app.route('/list_matches', methods=['GET'])
 def list_matches():
@@ -143,7 +146,7 @@ def update_match():
         status = request.form["status"]
         create = Matches(None,tournament_id,None, round_no, scheduled_at, status)
         create.update_match()
-        return "success"
+        return render_template('update_matches.html')
     
 
 
@@ -156,7 +159,7 @@ def delete_match():
         match_id = request.form["match_id"]
         delete = Matches(match_id,None,None,None,None,None)
         delete.delete_match()
-        return "success"
+        return render_template('delete_matches.html')
 
 
 if __name__ == "__main__":
