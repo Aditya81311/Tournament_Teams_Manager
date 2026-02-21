@@ -12,7 +12,8 @@ class Data_base():
             user_name VARCHAR(100) NOT NULL,
             user_email VARCHAR(100) UNIQUE NOT NULL,
             user_phone VARCHAR(12) UNIQUE,
-            user_role VARCHAR(50) NOT NULL
+            user_role VARCHAR(50) NOT NULL,
+            password VARCHAR(225)
           )
         ''')
         print("User Table Crated ")
@@ -98,12 +99,15 @@ class Data_base():
         ''')
         print("Leader Board Table Created")
 if __name__ == "__main__":
-    create_tables = Data_base()
-    create_tables.user_table()
-    create_tables.team_table()
-    create_tables.team_member()
-    create_tables.games_table()
-    create_tables.tournament_table()
-    create_tables.matches_table()
-    create_tables.leader_board_table()
+    # create_tables = Data_base()
+    # create_tables.user_table()
+    # create_tables.team_table()
+    # create_tables.team_member()
+    # create_tables.games_table()
+    # create_tables.tournament_table()
+    # create_tables.matches_table()
+    # create_tables.leader_board_table()
+    print(cur.execute('SELECT * FROM users').fetchall())
+    conn.commit()
+    conn.close()
     

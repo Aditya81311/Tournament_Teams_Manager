@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Home</title>
+    <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar">
         <a href="/">Home</a>
         <a href="/list_games">Games</a>
@@ -33,8 +33,7 @@
 
     <div class="dashboard">
         {% if session.get("user_id") %}
-            <h1>Welcome, <span>{{ session.get("user_name") }}</span></h1>
-            <p>Select a section below to get started.</p>
+            <h1>Welcome, {{ session.get("user_name") }}!</h1>
 
             {% if session.get("user_role") == "admin" %}
                 <div class="card-group">
@@ -42,22 +41,16 @@
                         <h2>Games</h2>
                         <a href="/add_games">Add Game</a>
                         <a href="/list_games">List Games</a>
-                        <a href="/update_games">Update Game</a>
-                        <a href="/delete_games">Delete Game</a>
                     </div>
                     <div class="card">
                         <h2>Tournaments</h2>
                         <a href="/create_tournaments">Create Tournament</a>
                         <a href="/list_tournaments">List Tournaments</a>
-                        <a href="/update_tournaments">Update Tournament</a>
-                        <a href="/delete_tournaments">Delete Tournament</a>
                     </div>
                     <div class="card">
                         <h2>Matches</h2>
-                        <a href="/create_matches">Create Match</a>
+                        <a href="/create_matches">Add Match</a>
                         <a href="/list_matches">List Matches</a>
-                        <a href="/update_matches">Update Match</a>
-                        <a href="/delete_matches">Delete Match</a>
                     </div>
                     <div class="card">
                         <h2>Leaderboard</h2>
@@ -87,8 +80,8 @@
                 </div>
             {% endif %}
         {% else %}
-            <h1>Welcome to <span>Arena</span></h1>
-            <p>Please <a href="/login">login</a> or <a href="/register">register</a> to continue.</p>
+            <h1>Welcome to the Tournament App</h1>
+            <p style="text-align:center;">Please <a href="/login">login</a> or <a href="/register">register</a> to continue.</p>
         {% endif %}
     </div>
 </body>
